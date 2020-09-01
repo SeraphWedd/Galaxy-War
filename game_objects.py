@@ -64,7 +64,8 @@ class GridBackground(pg.sprite.Sprite):
         self.GE = ge
         self.angle = 0
         self.timer = 0
-        self.bg_rect = (0, 0, 0, 0)
+        self.bg_rect = self.GE.GM.get('grid_bg.png').get_rect()
+        self.bg_rect.center = pg.Vector2(self.GE.size)/2
         self.color = (0, 150, 20)
         self.vkey = 0
         self.hkey = 0
@@ -146,20 +147,33 @@ class GridBackground(pg.sprite.Sprite):
     '''
 
     def update(self, dt):
-        if int(self.angle) != int(self.angle + dt/100):
-            self.angle = (self.angle + dt/100)%360
+        if int(self.angle) != int(self.angle + dt/10):
+            self.angle = (self.angle + dt/10)%360
             self.GE.GM.rotate('grid_bg.png', self.angle, False, 'rotated_bg')
             self.bg_rect = self.GE.GM.get('rotated_bg').get_rect()
             self.bg_rect.center = pg.Vector2(self.GE.size)/2
         else:
-            self.angle = (self.angle + dt/100)%360
+            self.angle = (self.angle + dt/10)%360
+
+        speed = 24 * dt
+        if self.GE.EM.controller[pg.K_UP]:
+            self.hkey = (self.hkey + speed)%6
+
+        elif self.GE.EM.controller[pg.K_DOWN]:
+            self.hkey = (self.hkey - speed)%6
+
+        if self.GE.EM.controller[pg.K_LEFT]:
+            self.vkey = (self.vkey + speed)%6
+
+        elif self.GE.EM.controller[pg.K_RIGHT]:
+            self.vkey = (self.vkey - speed)%6
 
     def draw(self, screen):
         screen.blit(self.GE.GM.get('rotated_bg'),
                                    self.bg_rect)
-        screen.blit(self.GE.GM.get(f'{self.vkey}gridv.png'),
+        screen.blit(self.GE.GM.get(f'{int(self.vkey)}gridv.png'),
                                    (0, self.GE.size[1]//2))
-        screen.blit(self.GE.GM.get(f'{self.hkey}gridh.png'),
+        screen.blit(self.GE.GM.get(f'{int(self.hkey)}gridh.png'),
                                    (0, 0))
 
 

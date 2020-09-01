@@ -74,7 +74,7 @@ class GameEngine(object):
             self.PM.update()
 
             if any(self.EM.controller.values()):
-                self.screen.fill((255, 255, 255))
+                self.screen.fill((100, 255, 255))
             else:
                 self.screen.fill((0, 0, 255))
                 
