@@ -51,6 +51,7 @@ class GameEngine(object):
     def run(self):
         import time
         loader = LoadingImage(self, (pg.Vector2(.9, .9)))
+        grid = GridBackground(self)
 
         #Test for loader
         for i in range(20):
@@ -63,6 +64,7 @@ class GameEngine(object):
         #End of test for loader
         
         self.PM.add_entity(loader)
+        self.PM.add_entity(grid)
         
         while self.running:
             
@@ -77,9 +79,12 @@ class GameEngine(object):
                 self.screen.fill((0, 0, 255))
                 
             #loader.update(self.PM.dt)
-            pg.display.set_caption(f'{self.SC.get_done()*100}')
+            pg.display.set_caption(
+                f'{self.SC.get_done()*100}% fps={self.PM.timer.get_fps()}'
+            )
             
-            loader.draw(self.screen)
+            grid.draw(self.screen)
+            #loader.draw(self.screen)
             
             pg.display.flip()
 
@@ -87,5 +92,4 @@ class GameEngine(object):
 if __name__ == "__main__":
     GE = GameEngine()
     GE.run()
-    pg.quit()
 

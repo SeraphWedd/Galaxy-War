@@ -57,6 +57,112 @@ class Resources(object):
             self.prod_per_sec - self.cons_per_sec))
 
 
+class GridBackground(pg.sprite.Sprite):
+
+    def __init__(self, ge):
+        pg.sprite.Sprite.__init__(self)
+        self.GE = ge
+        self.angle = 0
+        self.timer = 0
+        self.bg_rect = (0, 0, 0, 0)
+        self.color = (0, 150, 20)
+        self.vkey = 0
+        self.hkey = 0
+
+    '''
+    
+    #Commented out
+    #Code for recreating images for the grid
+    
+        self.create_backdrop()
+        self.draw_backdrop()
+    
+    def create_backdrop(self):
+        w, h = self.GE.size
+        self.screen_0 = pg.surface.Surface((w, h)).convert_alpha()
+        self.screen_0.fill((0, 0, 0, 0))
+        self.screen_1 = pg.surface.Surface((w, h)).convert_alpha()
+        self.screen_1.fill((0, 0, 0, 0))
+        self.screen_2 = pg.surface.Surface((w, int(h*0.5))).convert_alpha()
+        self.screen_2.fill((0, 0, 0, 0))
+        self.screen_3 = pg.surface.Surface((2*w, 2*w)).convert_alpha()
+        self.screen_3.fill((0, 0, 0, 255))
+        self.bg_rect = self.screen_3.get_rect()
+
+        from random import randint as ri
+        for i in range(200):
+            x = ri(0, 2*w)
+            y = ri(0, 2*w)
+            r = ri(1, 3)
+            pg.draw.circle(self.screen_3, (255, 255, 255, 155), (x, y), r)
+        pg.image.save(self.screen_3, 'Resources/Images/grid_bg.png')
+            
+
+    def draw_backdrop(self):
+        w, h = self.GE.size
+        start = pg.Vector2(int(w/2), int(h/2)-10)
+        end = pg.Vector2(2*w, int(h/2)-10)
+        diff = end - start
+
+        for i in range(6):
+            self.screen_0.fill((0, 0, 0, 0))
+            self.screen_2.fill((0, 0, 0, 0))
+            for angle in range(0, 360, 6):
+                x, y = diff.rotate(i+angle) + start
+                pg.draw.line(self.screen_0, self.color, start, (x, y), 1)
+                pg.draw.aaline(self.screen_0, self.color, start, (x, y), 1)
+            
+            self.screen_2.blit(self.screen_0, (0, -h//2))
+            pg.draw.line(self.screen_2, self.color, (0, 0), (w, 0), 2)
+            pg.draw.aaline(self.screen_2, self.color, (0, 0), (w, 0), 2)
+            pg.image.save(self.screen_2, f'Resources/Images/{i}gridv.png')
+
+        
+        for i in range(1, 7):
+            self.screen_0.fill((0, 0, 0, 0))
+            self.screen_1.fill((0, 0, 0, 0))
+            dr = i/6
+            dy = 1
+            c = 0
+            ay = h//2
+            while dy*dr + ay < h:
+                pg.draw.line(self.screen_0, self.color,
+                             (0, ay+dy*dr), (w, ay+dy*dr), 1)
+                pg.draw.aaline(self.screen_0, self.color,
+                               (0, ay+dy*dr), (w, ay+dy*dr), 1)
+                ay += dy
+                c += 1
+                dy = 1.5**c
+            self.screen_1.blit(self.screen_0, (0, 0))
+            pg.draw.line(self.screen_2, self.color, (0, h//2), (w, h//2), 2)
+            pg.draw.aaline(self.screen_1, self.color, (0, h//2), (w, h//2), 2)
+            pg.image.save(self.screen_1, f'Resources/Images/{i-1}gridh.png')
+            
+                
+        self.screen_1.fill((0, 0, 0))
+        self.screen_1.blit(self.screen_3, (0, 0))
+        self.screen_2.blit(self.screen_0, (0, -h//2))
+        self.screen_1.blit(self.screen_2, (0, h//2))
+    '''
+
+    def update(self, dt):
+        if int(self.angle) != int(self.angle + dt/100):
+            self.angle = (self.angle + dt/100)%360
+            self.GE.GM.rotate('grid_bg.png', self.angle, False, 'rotated_bg')
+            self.bg_rect = self.GE.GM.get('rotated_bg').get_rect()
+            self.bg_rect.center = pg.Vector2(self.GE.size)/2
+        else:
+            self.angle = (self.angle + dt/100)%360
+
+    def draw(self, screen):
+        screen.blit(self.GE.GM.get('rotated_bg'),
+                                   self.bg_rect)
+        screen.blit(self.GE.GM.get(f'{self.vkey}gridv.png'),
+                                   (0, self.GE.size[1]//2))
+        screen.blit(self.GE.GM.get(f'{self.hkey}gridh.png'),
+                                   (0, 0))
+
+
 class Research(object):
 
     def __init__(self):
