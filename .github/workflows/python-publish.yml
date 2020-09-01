@@ -1,0 +1,25 @@
+#Basic Workflow for creating a pygame executable
+name: Create Executable Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pygame
+    - name: Build an Executable
+      run: |
+        python setup.py build
