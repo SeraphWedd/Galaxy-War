@@ -147,7 +147,7 @@ class GridBackground(pg.sprite.Sprite):
     '''
 
     def update(self, dt):
-        if int(self.angle) != int(self.angle + dt/10):
+        if int(10*self.angle) != int(10*self.angle + dt):
             self.angle = (self.angle + dt/10)%360
             self.GE.GM.rotate('grid_bg.png', self.angle, False, 'rotated_bg')
             self.bg_rect = self.GE.GM.get('rotated_bg').get_rect()

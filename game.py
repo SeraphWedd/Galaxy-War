@@ -21,7 +21,7 @@ class GameEngine(object):
         
         pg.init()
         
-        self.size = (800, 600)
+        self.size = (1024, 720)
         self.window_resize(self.size)
         
         self.AM = AudioManager()
@@ -37,15 +37,15 @@ class GameEngine(object):
 
     def close(self):
         print('closing...')
-        #self.AM.load_sound('default.mp3')
+        threading._shutdown()
         pg.quit()
         sys.exit()
 
     def window_resize(self, size):
-        self.size = (max(800, size[0]), max(600, size[1]))
+        #self.size = (max(800, size[0]), max(600, size[1]))
         self.screen = pg.display.set_mode(
             self.size,
-            pg.HWSURFACE|pg.DOUBLEBUF|pg.RESIZABLE
+            pg.HWSURFACE|pg.DOUBLEBUF
         )
 
     def run(self):
@@ -74,9 +74,9 @@ class GameEngine(object):
             self.PM.update()
 
             if any(self.EM.controller.values()):
-                self.screen.fill((100, 255, 255))
+                self.screen.fill((255,223,100))
             else:
-                self.screen.fill((0, 0, 255))
+                self.screen.fill((100, 100, 0))
                 
             #loader.update(self.PM.dt)
             pg.display.set_caption(

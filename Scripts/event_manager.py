@@ -60,6 +60,10 @@ class EventManager(object):
             elif event.type == pg.MOUSEBUTTONUP:
                 self.mouse = pg.mouse.get_pressed()
 
+        if (self.controller[pg.K_LALT] and self.controller[pg.K_F4]):
+            self.event_queue['quit'] = pg.event.Event(pg.QUIT, {})
+            
+
     def loop_process(self, ge):
         """
         Processing the captured event.

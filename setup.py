@@ -6,10 +6,10 @@ includefiles = ['Resources', #Add Images and Music here
                 ]
 
 excludes = ['scipy', 'numpy']
-packages = ["Scripts", #Local Scripts
+packages = ["Scripts", "game_objects.py", #Local Scripts
     "pygame", "math", "sys", "os", "threading", "collections"]#Python Packages
 
-target = Executable(script='call_of_war_clone.py',
+target = Executable(script='game.py',
                     base='WIN32GUI', #None if console only
                     targetName='game',
                     shortcutName='Call of War Clone',
