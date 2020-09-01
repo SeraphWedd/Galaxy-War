@@ -12,6 +12,7 @@ from Scripts.physics_manager import PhysicsManager
 from Scripts.event_manager import EventManager
 from Scripts.scheduler import Scheduler
 from Scripts.entities import *
+from game_objects import *
 
 
 class GameEngine(object):
@@ -48,14 +49,10 @@ class GameEngine(object):
         )
 
     def run(self):
-        
-        loading = self.GM.get('loading.png')
-        i = 0
-        pos = pg.Vector2(self.size) - pg.Vector2(100, 100)
-        self.GM.rotate('loading.png', 0, False, 'l1')
-        loader = DynamicImage(self, 'l1')
-        loader.set_pos(*pos, True)
-        
+        import time
+        loader = LoadingImage(self, (pg.Vector2(.9, .9)))
+
+        #Test for loader
         for i in range(20):
             self.SC.add_to_queue(['sound', str(i)+'default.ogg', 1.0, False])
 
@@ -63,6 +60,9 @@ class GameEngine(object):
             target=self.SC.loop, args=[self,]
         )
         load_thread.start()
+        #End of test for loader
+        
+        s, e = time.time(), time.time()
         while self.running:
             
             self.EM.loop_capture()
@@ -73,14 +73,12 @@ class GameEngine(object):
             else:
                 self.screen.fill((0, 0, 255))
 
-            i -= .3
-            self.GM.rotate('loading.png', i, False, 'l1')
-            loader.init_image_rect()
-            loader.set_pos(*pos, True)
+            loader.update(e-s)
             pg.display.set_caption(f'{self.SC.get_done()*100}')
             
             loader.draw(self.screen)
             pg.display.flip()
+            s, e = e, time.time()
 
 
 class Resources(object):
@@ -119,7 +117,7 @@ class Research(object):
             1, #Base Level
             1.1, 1.2, 1.3, 1.4, 1.5, #Rank 1 research
             1.6, 1.8, 2.0, 2.2, 2.5, #Rank 2 research
-            3.0, 3.5, 4.0, 4.5, 5.0 #Rank 3 Research
+            3.0, 3.5, 4.0, 4.5, 5.0, #Rank 3 Research
             6.0, 7.0, 8.0, 9.0, 10.0 #Final Rank Research
             ]
         
@@ -159,7 +157,7 @@ class Ship(object):
         return self.rank_multiplier[self.rank] * self.attack
 
     def get_defense(self):
-        return self.rank_multiplier[self.rank] * self.attack
+        return self.rank_multiplier[self.rank] * self.defense
 
     def apply_research_bonus(self, research):
         for key in research.keys():
@@ -187,7 +185,7 @@ class Ship(object):
         self.total_damage += damage
         
         return damage
-                
+
 
 if __name__ == "__main__":
     GE = GameEngine()

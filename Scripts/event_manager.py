@@ -69,7 +69,7 @@ class EventManager(object):
         #print('process...')
         try:
             for key in self.event_queue.keys():
-                event = self.event_queue.pop(key)
+                event = self.event_queue[key]
             
                 if event.type == pg.QUIT:
                     response = ge.confirmation('quit')
@@ -81,6 +81,7 @@ class EventManager(object):
 
                 if event.type == pg.MOUSEMOTION:
                     self.pos = pg.mouse.get_pos()
+            self.event_queue.clear()
                 
         except Exception as e:
             print(e)
