@@ -62,6 +62,8 @@ class GameEngine(object):
         load_thread.start()
         #End of test for loader
         
+        self.PM.add_entity(loader)
+        
         while self.running:
             
             self.EM.loop_capture()
@@ -74,7 +76,7 @@ class GameEngine(object):
             else:
                 self.screen.fill((0, 0, 255))
                 
-            loader.update(self.PM.dt)
+            #loader.update(self.PM.dt)
             pg.display.set_caption(f'{self.SC.get_done()*100}')
             
             loader.draw(self.screen)

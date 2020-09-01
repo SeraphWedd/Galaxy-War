@@ -2,6 +2,7 @@
 '''
 
 import pygame as pg
+import threading
 
 
 class PhysicsManager(object):
@@ -22,6 +23,9 @@ class PhysicsManager(object):
         
         self.entity_group = pg.sprite.Group()
         self.running_threads = []
+
+    def add_entity(self, obj):
+        self.entity_group.add(obj)
     
     def update(self, alpha=1.0):
         """
@@ -33,13 +37,6 @@ class PhysicsManager(object):
         dt = self.dt * alpha
         
         for entity in self.entity_group:
-            thread = threading.Thread(
-                target=entity.update,
-                args=dt
-            )
-            self.running_threads.append(thread)
-
-        for thread in self.running_threads:
-            thread.start()
+            entity.update(dt)
 
         self.timer.tick_busy_loop(self.fps)

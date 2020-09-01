@@ -10,10 +10,10 @@ import pygame as pg
 from Scripts.entities import *
 
 
-class LoadingImage(object):
+class LoadingImage(pg.sprite.Sprite):
 
     def __init__(self, ge, pos, rad_angle=0, rps=0.5):
-
+        pg.sprite.Sprite.__init__(self)
         self.GE = ge
         self.pos = pos
         self.angle = rad_angle
