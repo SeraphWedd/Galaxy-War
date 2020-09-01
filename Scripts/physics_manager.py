@@ -18,6 +18,7 @@ class PhysicsManager(object):
 
         self.fps = 60
         self.timer = pg.time.Clock()
+        self.dt = 0
         
         self.entity_group = pg.sprite.Group()
         self.running_threads = []
@@ -28,7 +29,8 @@ class PhysicsManager(object):
 
         """
         
-        dt = self.timer.get_time() * alpha
+        self.dt = self.timer.get_time()/1000
+        dt = self.dt * alpha
         
         for entity in self.entity_group:
             thread = threading.Thread(
@@ -39,3 +41,5 @@ class PhysicsManager(object):
 
         for thread in self.running_threads:
             thread.start()
+
+        self.timer.tick_busy_loop(self.fps)
